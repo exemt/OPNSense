@@ -306,7 +306,7 @@ function plugins_run($hook, $verbose = false, $args = array())
                      * pull more info from the configure call spot.
                      */
                     $signature = explode(':', $task);
-                    list($argf, $argc) = count($signature) == 1 ? [$signature[0], null] : $signature;
+                    list($argf, $argc) = [$signature[0], $signature[1] ?? null];
                     if (empty($argc) || !is_numeric($argc)) {
                         $argc = 1;
                     }
