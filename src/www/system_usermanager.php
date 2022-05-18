@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $pconfig['scope'] = "user";
             $pconfig['usernamefld'] = null;
             $pconfig['authorizedkeys'] = null;
-			$pconfig['language'] = null;
+            $pconfig['language'] = null;
             foreach ($fieldnames as $fieldname) {
                 if (!isset($pconfig[$fieldname])) {
                     $pconfig[$fieldname] = null;
@@ -815,7 +815,7 @@ $( document ).ready(function() {
                           $i = 0;
                           foreach ($a_user[$id]['cert'] as $certref) :
                             $cert = lookup_cert($certref);
-                            $ca = lookup_ca($cert['caref']);
+                            $ca = lookup_ca($cert['caref'] ?? null);
                             list($cert_validfrom, $cert_validto) = cert_get_dates($cert['crt']);
                             $new_cert_link_suffix = "&amp;method=internal&amp;caref={$cert['caref']}";
 ?>
@@ -824,7 +824,7 @@ $( document ).ready(function() {
                               <?=is_cert_revoked($cert) ? "(<b>".gettext('Revoked')."</b>)" : "";?>
                           </td>
                           <td>
-                            <?=htmlspecialchars($ca['descr']);?>
+                            <?=htmlspecialchars($ca['descr'] ?? null);?>
                           </td>
                           <td><?=$cert_validfrom;?></td>
                           <td><?=$cert_validto;?></td>
