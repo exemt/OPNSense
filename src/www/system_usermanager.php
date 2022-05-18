@@ -121,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $fieldnames = array('user_dn', 'descr', 'expires', 'scope', 'uid', 'priv', 'ipsecpsk',
                             'otp_seed', 'email', 'shell', 'comment', 'landing_page');
         if (isset($id)) {
+			$pconfig['authorizedkeys'] = null;
             if (isset($a_user[$id]['authorizedkeys'])) {
                 $pconfig['authorizedkeys'] = base64_decode($a_user[$id]['authorizedkeys']);
             }
@@ -138,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             }
 
             foreach (get_locale_list() as $lcode => $ldesc) {
-                if ($a_user[$id]['language'] == $lcode) {
+                if (isset($a_user[$id]['language']) && $a_user[$id]['language'] == $lcode) {
                     $pconfig['language'] = $ldesc;
                     break;
                 }
@@ -149,6 +150,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $pconfig['disabled'] = false;
             $pconfig['scope'] = "user";
             $pconfig['usernamefld'] = null;
+            $pconfig['authorizedkeys'] = null;
+			$pconfig['language'] = null;
             foreach ($fieldnames as $fieldname) {
                 if (!isset($pconfig[$fieldname])) {
                     $pconfig[$fieldname] = null;
@@ -250,7 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             }
         }
 
-        if (!empty($pconfig['disabled']) && $_SESSION['Username'] === $a_user[$id]['name']) {
+        if (!empty($pconfig['disabled']) && isset($id) && $_SESSION['Username'] === $a_user[$id]['name']) {
             $input_errors[] = gettext('You cannot disable yourself.');
         }
 
@@ -383,7 +386,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $a_user[] = $userent;
             }
 
-            local_user_set_groups($userent, $pconfig['groups']);
+            local_user_set_groups($userent, $pconfig['groups'] ?? null);
             local_user_set($userent);
             if (isset($id)) {
                 $audit_msg = sprintf("user \"%s\" changed", $userent['name']);
@@ -594,7 +597,7 @@ $( document ).ready(function() {
                   <tr>
                     <td><i class="fa fa-info-circle text-muted"></i> <?=gettext("Disabled");?></td>
                     <td>
-                      <input name="disabled" type="checkbox" id="disabled" <?= $pconfig['disabled'] ? "checked=\"checked\"" : "" ?> />
+                      <input name="disabled" type="checkbox" id="disabled" <?= $pconfig['disabled'] ?? null ? "checked=\"checked\"" : "" ?> />
                     </td>
                   </tr>
                   <tr>
@@ -752,7 +755,7 @@ $( document ).ready(function() {
                     </td>
                   </tr>
 <?php
-                  if ($pconfig['uid'] != "") :?>
+                  if (isset($id)) :?>
                   <tr>
                     <td><i class="fa fa-info-circle text-muted"></i> <?=gettext("Effective Privileges");?></td>
                     <td>

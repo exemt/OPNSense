@@ -256,11 +256,12 @@ $a_cert = &config_read_array('cert');
 
 // handle user GET/POST data
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (isset($a_user[$_GET['userid']])) {
+	$userid = null;
+    if (isset($_GET['userid']) && isset($a_user[$_GET['userid']])) {
         $userid = $_GET['userid'];
         $cert_methods["existing"] = gettext("Choose an existing certificate");
     }
-    if (isset($a_cert[$_GET['id']])) {
+    if (isset($_GET['id']) && isset($a_cert[$_GET['id']])) {
         $id = $_GET['id'];
     }
 
@@ -268,14 +269,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $pconfig = array();
     if ($act == "new") {
-        if (isset($_GET['method'])) {
-            $pconfig['certmethod'] = $_GET['method'];
-        } else {
-            $pconfig['certmethod'] = null;
-        }
-        if (isset($_GET['caref'])) {
-            $pconfig['caref'] = $_GET['caref'];
-        }
+        $pconfig['certmethod'] = isset($_GET['method']) ? $_GET['method'] : null;
+        $pconfig['caref'] = isset($_GET['caref']) ? $_GET['caref'] : null;
+        $pconfig['csr'] = null;
+        $pconfig['private_key_location'] = null;
         $pconfig['keytype'] = "RSA";
         $pconfig['keylen'] = "2048";
         $pconfig['digest_alg'] = "sha256";
@@ -356,10 +353,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pconfig = $_POST;
-    if (isset($a_cert[$_POST['id']])) {
+    if (isset($_POST['id']) && isset($a_cert[$_POST['id']])) {
         $id = $_POST['id'];
     }
-    if (isset($a_user[$_POST['userid']])) {
+    if (isset($_POST['userid']) && isset($a_user[$_POST['userid']])) {
         $userid = $_POST['userid'];
     }
     $act = isset($_POST['act']) ? $_POST['act'] : null;
@@ -1441,7 +1438,7 @@ $( document ).ready(function() {
                     <td><a id="help_for_basic_extensions_sign_csr" href="#" class="showhelp"><i class="fa fa-info-circle"></i></a> <?=gettext('basicConstraints');?></td>
                     <td>
                       <input type="checkbox" name="basic_constraints_is_ca_sign_csr" id="basic_constraints_is_ca_sign_csr" value="true" /> <?= gettext('is CA'); ?><br />
-                      <?= gettext('Maximum Path Length'); ?>: <input type="text" name="basic_constraints_path_len_sign_csr" id="basic_constraints_path_len_sign_csr" size="5" value="<?=$pconfig['basic_constraints_sign_csr'];?>"/>
+                      <?= gettext('Maximum Path Length'); ?>: <input type="text" name="basic_constraints_path_len_sign_csr" id="basic_constraints_path_len_sign_csr" size="5" value="<?=$pconfig['basic_constraints_path_len_sign_csr'] ?? null;?>"/>
                       <div class="hidden" data-for="help_for_basic_extensions_sign_csr">
                         <strong><?= gettext('Maximum Path Length'); ?></strong>: <?= gettext('Define the maximum number of non-self-issued intermediate certificates that may follow this certificate in a valid certification path.'); ?>
                       </div>
@@ -1822,7 +1819,7 @@ $( document ).ready(function() {
                   <select name="csr_dn_country" id="csr_dn_country" class="selectpicker">
 <?php
                   foreach (get_country_codes() as $cc => $cn):?>
-                    <option value="<?=$cc;?>" <?=$pconfig['csr_dn_country'] == $cc ? "selected=\"selected\"" : "";?>>
+                    <option value="<?=$cc;?>" <?=$pconfig['csr_dn_country'] ?? null == $cc ? "selected=\"selected\"" : "";?>>
                       <?=$cc;?> (<?=$cn;?>)
                     </option>
 <?php
@@ -1833,7 +1830,7 @@ $( document ).ready(function() {
               <tr>
                 <td><a id="help_for_digest_csr_dn_state" href="#" class="showhelp"><i class="fa fa-info-circle"></i></a> <?=gettext("State or Province");?> : &nbsp;</td>
                 <td>
-                  <input name="csr_dn_state" type="text" size="40" value="<?=$pconfig['csr_dn_state'];?>"/>
+                  <input name="csr_dn_state" type="text" size="40" value="<?=$pconfig['csr_dn_state'] ?? null;?>"/>
                   <div class="hidden" data-for="help_for_digest_csr_dn_state">
                     <em><?=gettext("ex:");?></em>
                     &nbsp;
@@ -1844,7 +1841,7 @@ $( document ).ready(function() {
               <tr>
                 <td><a id="help_for_digest_csr_dn_city" href="#" class="showhelp"><i class="fa fa-info-circle"></i></a> <?=gettext("City");?> : &nbsp;</td>
                 <td>
-                  <input name="csr_dn_city" type="text" size="40" value="<?=$pconfig['csr_dn_city'];?>"/>
+                  <input name="csr_dn_city" type="text" size="40" value="<?=$pconfig['csr_dn_city'] ?? null;?>"/>
                   <div class="hidden" data-for="help_for_digest_csr_dn_city">
                     <em><?=gettext("ex:");?></em>
                     &nbsp;
@@ -1855,7 +1852,7 @@ $( document ).ready(function() {
               <tr>
                 <td><a id="help_for_digest_csr_dn_organization" href="#" class="showhelp"><i class="fa fa-info-circle"></i></a> <?=gettext("Organization");?> : &nbsp;</td>
                 <td>
-                  <input name="csr_dn_organization" type="text" size="40" value="<?=$pconfig['csr_dn_organization'];?>"/>
+                  <input name="csr_dn_organization" type="text" size="40" value="<?=$pconfig['csr_dn_organization'] ?? null;?>"/>
                   <div class="hidden" data-for="help_for_digest_csr_dn_organization">
                     <em><?=gettext("ex:");?></em>
                     &nbsp;
@@ -1866,7 +1863,7 @@ $( document ).ready(function() {
               <tr>
                 <td><a id="help_for_digest_csr_dn_organizationalunit" href="#" class="showhelp"><i class="fa fa-info-circle"></i></a> <?=gettext("Organizational Unit");?> : &nbsp;</td>
                 <td>
-                  <input name="csr_dn_organizationalunit" type="text" size="40" value="<?=$pconfig['csr_dn_organizationalunit'];?>"/>
+                  <input name="csr_dn_organizationalunit" type="text" size="40" value="<?=$pconfig['csr_dn_organizationalunit'] ?? null;?>"/>
                   <div class="hidden" data-for="help_for_digest_csr_dn_organizationalunit">
                     <em><?=gettext("ex:");?></em>
                     &nbsp;
@@ -1877,7 +1874,7 @@ $( document ).ready(function() {
               <tr>
                 <td><a id="help_for_digest_csr_dn_email" href="#" class="showhelp"><i class="fa fa-info-circle"></i></a> <?=gettext("Email Address");?> : &nbsp;</td>
                 <td>
-                  <input name="csr_dn_email" type="text" size="25" value="<?=$pconfig['csr_dn_email'];?>"/>
+                  <input name="csr_dn_email" type="text" size="25" value="<?=$pconfig['csr_dn_email'] ?? null;?>"/>
                   <div class="hidden" data-for="help_for_digest_csr_dn_email">
                     <em><?=gettext("ex:");?></em>
                     &nbsp;
@@ -1888,7 +1885,7 @@ $( document ).ready(function() {
               <tr>
                 <td><a id="help_for_digest_csr_dn_commonname" href="#" class="showhelp"><i class="fa fa-info-circle"></i></a> <?=gettext("Common Name");?> : &nbsp;</td>
                 <td>
-                  <input name="csr_dn_commonname" type="text" size="25" value="<?=$pconfig['csr_dn_commonname'];?>"/>
+                  <input name="csr_dn_commonname" type="text" size="25" value="<?=$pconfig['csr_dn_commonname'] ?? null;?>"/>
                   <div class="hidden" data-for="help_for_digest_csr_dn_commonname">
                     <em><?=gettext("ex:");?></em>
                     &nbsp;
