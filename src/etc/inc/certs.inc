@@ -27,26 +27,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+require_once('phpseclib/File/X509.php');
+require_once('phpseclib/File/ASN1.php');
+require_once('phpseclib/Math/BigInteger.php');
+require_once('phpseclib/File/ASN1/Element.php');
+require_once('phpseclib/Crypt/RSA.php');
+require_once('phpseclib/Crypt/Hash.php');
+
 $openssl_digest_algs = array("sha1", "sha224", "sha256", "sha384", "sha512");
 
-define("OCSP_REVOKED_STATUS_NOSTATUS", -1);
-define("OCSP_REVOKED_STATUS_UNSPECIFIED", 0);
-define("OCSP_REVOKED_STATUS_KEYCOMPROMISE", 1);
-define("OCSP_REVOKED_STATUS_CACOMPROMISE", 2);
-define("OCSP_REVOKED_STATUS_AFFILIATIONCHANGED", 3);
-define("OCSP_REVOKED_STATUS_SUPERSEDED", 4);
-define("OCSP_REVOKED_STATUS_CESSATIONOFOPERATION", 5);
-define("OCSP_REVOKED_STATUS_CERTIFICATEHOLD", 6);
-
-$openssl_crl_status = array(
-  OCSP_REVOKED_STATUS_NOSTATUS              => "No Status (default)",
-  OCSP_REVOKED_STATUS_UNSPECIFIED           => "Unspecified",
-  OCSP_REVOKED_STATUS_KEYCOMPROMISE         => "Key Compromise",
-  OCSP_REVOKED_STATUS_CACOMPROMISE          => "CA Compromise",
-  OCSP_REVOKED_STATUS_AFFILIATIONCHANGED    => "Affiliation Changed",
-  OCSP_REVOKED_STATUS_SUPERSEDED            => "Superseded",
-  OCSP_REVOKED_STATUS_CESSATIONOFOPERATION  => "Cessation of Operation",
-  OCSP_REVOKED_STATUS_CERTIFICATEHOLD       => "Certificate Hold"
+$phpseclib_crl_status = array(
+    "unused"                => "No Status (default)",
+    "unused"                => "Unspecified",
+    "keyCompromise"         => "Key Compromise",
+    "cACompromise"          => "CA Compromise",
+    "affiliationChanged"    => "Affiliation Changed",
+    "superseded"            => "Superseded",
+    "cessationOfOperation"  => "Cessation of Operation",
+    "certificateHold"       => "Certificate Hold"
 );
 
 function &lookup_ca($refid)
@@ -596,24 +594,54 @@ function crl_update(&$crl)
         return false;
     }
     // If we have text but no certs, it was imported and cannot be updated.
-    if (($crl["method"] != "internal") && (!empty($crl['text']) && empty($crl['cert']))) {
+    if (($crl["crlmethod"] != "internal") && (!empty($crl['text']) && empty($crl['cert']))) {
         return false;
     }
     $crl['serial']++;
     $ca_str_crt = base64_decode($ca['crt']);
     $ca_str_key = base64_decode($ca['prv']);
-    $crl_res = openssl_crl_new($ca_str_crt, $crl['serial'], $crl['lifetime']);
+
+    /* Load CA */
+    $ca_key = new \phpseclib\Crypt\RSA();
+    $ca_key->loadKey($ca_str_key);
+    $ca_x509 = new \phpseclib\File\X509();
+    $ca_x509->loadX509($ca_str_crt);
+    $ca_x509->setPrivateKey($ca_key);
+
+    /* Create empty CRL */
+    $crl_new = new \phpseclib\File\X509();
+    $crl_new->loadCRL($crl_new->saveCRL($crl_new->signCRL($ca_x509, $crl_new)));
+    $crl_new->loadCA($ca_str_crt); /* For signature verification */
+
+    /* Validate the CRL - we pass false since it's always self-signed */
+    if (!$crl_new->validateSignature(false)) {
+        return false;
+    }
+
     if (is_array($crl['cert']) && (count($crl['cert']) > 0)) {
         foreach ($crl['cert'] as $cert) {
-            openssl_crl_revoke_cert($crl_res, base64_decode($cert["crt"]), $cert["revoke_time"], $cert["reason"]);
+            /* Build certificate */
+            $x509 = new \phpseclib\File\X509();
+            $loaded_cert = $x509->loadX509(base64_decode($cert["crt"]));
+            $x509->loadCA($ca_str_crt);
+
+            /* Validate signature */
+            if (!$x509->validateSignature(false)) {
+                return false;
+            }
+
+            /* get certificate serial number */
+            $sn = $loaded_cert['tbsCertificate']['serialNumber']->toString();
+            $crl_new->setRevokedCertificateExtension($sn, 'id-ce-cRLReasons', $cert["reason"]);
         }
     }
-    openssl_crl_export($crl_res, $crl_text, $ca_str_key);
-    $crl['text'] = base64_encode($crl_text);
-    return $crl_res;
+    $crl_new->setSerialNumber($crl['serial'], 10);
+    $crl_new->setEndDate('+' . $crl['lifetime'] . ' days');
+    $crl_res = $crl_new->signCRL($ca, $crl_new);
+    $crl['text'] = base64_encode($crl_new->saveCRL($crl_res));
 }
 
-function cert_revoke($cert, &$crl, $reason = OCSP_REVOKED_STATUS_UNSPECIFIED)
+function cert_revoke($cert, &$crl, $reason = "unused")
 {
     if (is_cert_revoked($cert, $crl['refid'])) {
         return true;

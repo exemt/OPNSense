@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
 
         if (!count($input_errors)) {
-            $reason = (empty($pconfig['crlreason'])) ? OCSP_REVOKED_STATUS_UNSPECIFIED : $pconfig['crlreason'];
+            $reason = (empty($pconfig['crlreason'])) ? "unused" : $pconfig['crlreason'];
             cert_revoke($cert, $crl, $reason);
             plugins_configure('crl');
             write_config(sprintf('Revoked certificate %s in CRL %s', $cert['descr'], $crl['descr']));
@@ -486,7 +486,7 @@ include("head.inc");
                 foreach ($thiscrl['cert'] as $cert) :?>
                 <tr>
                   <td><?=$cert['descr']; ?></td>
-                  <td><?=$openssl_crl_status[$cert["reason"]]; ?></td>
+                  <td><?=$phpseclib_crl_status[$cert["reason"]]; ?></td>
                   <td><?=date("D M j G:i:s T Y", $cert["revoke_time"]); ?></td>
                   <td>
                     <a id="del_cert_<?=$thiscrl['refid'];?>" data-id="<?=$thiscrl['refid'];?>" data-certref="<?=$cert['refid'];?>" title="<?=gettext("Delete this certificate from the CRL");?>" data-toggle="tooltip"  class="act_delete_cert btn btn-default btn-xs">
@@ -544,7 +544,7 @@ include("head.inc");
                   <td colspan="3" style="text-align:left">
                     <select name='crlreason' id='crlreason' class="selectpicker" data-style="btn-default">
 <?php
-                  foreach ($openssl_crl_status as $code => $reason) :?>
+                  foreach ($phpseclib_crl_status as $code => $reason) :?>
                     <option value="<?= $code ?>"><?=$reason?></option>
 <?php
                   endforeach;?>
