@@ -17,8 +17,9 @@
 <div class="col-md-12">
     <button class="btn btn-primary"  id="goPing" type="button"><b>{{ lang._('Save') }}</b></button>
 </div>
-<div class="col-md-12">
-    <div class="alert alert-primary" role="alert" id="pingResult">
-
+<div class="col-md-12" id="resultContainer">
+    <div class="alert alert-primary" role="alert" >
+        <pre id="pingResult">
+        </pre>
     </div>
 </div>
