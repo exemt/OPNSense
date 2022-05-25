@@ -8,7 +8,7 @@ class ServiceController extends ApiMutableServiceControllerBase
 {
 
     protected static $internalServiceClass = '\OPNsense\GerdenPing\GerdenPing';
-
+    protected static $internalServiceEnabled = 'general.enabled';
     protected static $internalServiceTemplate = 'OPNsense/GerdenPing';
 
     protected static $internalServiceName = 'ping';
