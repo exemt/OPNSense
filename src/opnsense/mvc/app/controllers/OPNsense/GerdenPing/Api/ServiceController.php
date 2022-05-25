@@ -42,8 +42,9 @@ class ServiceController extends ApiMutableServiceControllerBase
 
             $backend = new Backend();
             $result["data"] = trim($backend->configdRun('gerdenping ping '.$ip));
+            if(strlen($result["data"]) === 0)
+                throw new Exception('ping failed');
             $result["result"] = "ok";
-
         }catch (\Exception $e){
             return [
                 'result' => 'fail',

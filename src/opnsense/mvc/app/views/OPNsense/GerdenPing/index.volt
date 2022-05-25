@@ -6,13 +6,19 @@
         // link save button to API set action
         $("#goPing").click(function(){
             saveFormToEndpoint(url="/api/gerdenping/service/ping",formid='frm_mainform',callback_ok = function(response){
-                $('#pingResult').html(response.data)
-
+                switch(response.result){
+                    case 'ok':
+                        $('#pingResult').html(response.data)
+                    break;
+                    case 'fail':
+                        $('#pingResult').html(response.message)
+                    break;
+                    default:
+                    case 'fail':
+                        $('#pingResult').html('unknown ERROR')
+                }
             },true);
-
         });
-
-
     });
 </script>
 
