@@ -31,9 +31,11 @@ class ServiceController extends ApiMutableServiceControllerBase
                     $result["validations"] = array();
                 }
                 $result["validations"]["gerdenping.".$msg->getField()] = $msg->getMessage();
-                print_r($msg->getMessage());
-                die();
+
             }
+
+            print_r($this->request->getPost("gerdenping"));
+            die($this->request->getPost("gerdenping"));
 
             // serialize model to config and save
             if ($valMsgs->count() == 0) {
