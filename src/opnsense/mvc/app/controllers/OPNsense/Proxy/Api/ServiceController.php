@@ -87,7 +87,7 @@ class ServiceController extends ApiMutableServiceControllerBase
             // close session for long running action
             $this->sessionClose();
             $backend = new Backend();
-            return array('status' => $backend->configdRun('proxy reset'));
+            return array('status' => $backend->configdRun('proxy reset params'));
         } else {
             return array('error' => 'This API endpoint must be called via POST',
                          'status' => 'error');
