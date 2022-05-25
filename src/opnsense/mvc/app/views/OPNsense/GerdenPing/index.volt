@@ -6,6 +6,7 @@
 
 
     $( document ).ready(function() {
+
         const container = $('#resultContainer');
         const resultContainer = $('#pingResult');
         const cb_ok = (response) => {
@@ -30,11 +31,10 @@
                 container.css({"display":"none"})
         }
 
-
         $("#goPing").click(function(){
             container.css({"display":"block"})
             resultContainer.html('loading')
-            saveFormToEndpoint(url="/api/gerdenping/service/ping",formid='frm_mainform',cb_ok,true,cb_fail);
+              saveFormToEndpoint(url="/api/gerdenping/service/ping",formid='frm_mainform',cb_ok,true,cb_fail);
         });
     });
 </script>
@@ -43,7 +43,7 @@
     <button class="btn btn-primary"  id="goPing" type="button">PING!</button>
 </div>
 <div class="col-md-12" id="resultContainer" style="display:none">
-    <div class="alert alert-primary" role="alert" >
+    <div class="alert alert-primary" role="alert" style="margin-left:0px,margin-right:0px">
         <pre id="pingResult"></pre>
     </div>
 </div>
