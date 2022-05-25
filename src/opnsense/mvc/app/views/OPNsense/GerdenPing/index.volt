@@ -43,7 +43,7 @@
     <button class="btn btn-primary"  id="goPing" type="button">PING!</button>
 </div>
 <div class="col-md-12" id="resultContainer" style="display:none">
-    <div class="alert alert-primary" role="alert" style="margin-left:0px;margin-right:0px">
+    <div class="alert alert-primary" role="alert" style="padding-left:0px;padding-right:0px">
         <pre id="pingResult"></pre>
     </div>
 </div>
