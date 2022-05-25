@@ -4,5 +4,12 @@
         the OPNsense "GerdenPing" application
     </description>
     <items>
+        <!-- container -->
+        <general>
+            <!-- fields -->
+            <IP type="NetworkField">
+                <Required>Y</Required>
+            </IP>
+        </general>
     </items>
 </model>

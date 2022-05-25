@@ -1,0 +1,9 @@
+<form>
+    <field>
+        <id>gerdenping.mainform.IP</id>
+        <label>IP</label>
+        <type>text</type>
+        <help><![CDATA[ip address]]></help>
+        <hint>choose a valid IPv4/v6 address</hint>
+    </field>
+</form>
