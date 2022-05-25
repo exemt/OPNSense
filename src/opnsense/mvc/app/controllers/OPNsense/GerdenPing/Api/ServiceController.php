@@ -37,7 +37,7 @@ class ServiceController extends ApiMutableServiceControllerBase
                 throw new \Exception('validation fault');
 
             if(!filter_var($requestData['mainform']['IP'], FILTER_VALIDATE_IP));
-                throw new \Exception('invalid IP');
+                throw new \Exception('invalid IP '.$requestData['mainform']['IP']);
 
             $backend = new Backend();
             $result["data"] = trim($backend->configdRun('gerdenping ping '.$requestData['mainform']['IP']));
