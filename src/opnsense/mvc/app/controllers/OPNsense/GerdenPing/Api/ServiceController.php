@@ -25,11 +25,14 @@ class ServiceController extends ApiMutableServiceControllerBase
 
             // perform validation
             $valMsgs = $mdlGerdenPing->performValidation();
+            print_r($valMsgs);
+            die();
             foreach ($valMsgs as $field => $msg) {
                 if (!array_key_exists("validations", $result)) {
                     $result["validations"] = array();
                 }
                 $result["validations"]["gerdenping.".$msg->getField()] = $msg->getMessage();
+
             }
 
             // serialize model to config and save
