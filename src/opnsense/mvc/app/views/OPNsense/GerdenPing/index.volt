@@ -20,6 +20,8 @@
                         $('#pingResult').html('unknown ERROR')
                 }
             },true);
+        },callback_fail = (response) => {
+            $('#resultContainer').css({"display":"none"})
         });
     });
 </script>
