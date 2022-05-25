@@ -5,6 +5,7 @@
     $( document ).ready(function() {
         // link save button to API set action
         $("#goPing").click(function(){
+            $('#pingResult').html('loading')
             saveFormToEndpoint(url="/api/gerdenping/service/ping",formid='frm_mainform',callback_ok = function(response){
                 switch(response.result){
                     case 'ok':
