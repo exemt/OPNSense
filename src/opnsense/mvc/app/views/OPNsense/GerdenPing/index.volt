@@ -8,7 +8,7 @@
 
         // link save button to API set action
         $("#saveAct").click(function(){
-            saveFormToEndpoint(url="/api/helloworld/settings/set",formid='frm_GeneralSettings',callback_ok=function(){
+            saveFormToEndpoint(url="/api/gerdenping/service/pingt",formid='frm_mainform',callback_ok=function(){
                 // action to run after successful save, for example reconfigure service.
             });
         });
