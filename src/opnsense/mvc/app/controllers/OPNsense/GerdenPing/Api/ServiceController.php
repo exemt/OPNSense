@@ -33,7 +33,7 @@ class ServiceController extends ApiMutableServiceControllerBase
                 $result["validations"]["gerdenping.".$msg->getField()] = $msg->getMessage();
             }
 
-            print_r($mdlGerdenPing);
+            print_r($valMsgs);
             die();
 
             // serialize model to config and save
