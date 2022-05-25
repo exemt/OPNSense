@@ -16,7 +16,7 @@ class ServiceController extends ApiMutableServiceControllerBase
 
     public function pingAction()
     {
-        $result = array("result"=>"failed");
+        $result = array("result"=>"error");
         if ($this->request->isPost()) {
             // load model and update with provided data
             $mdlGerdenPing = new GerdenPing();
@@ -33,9 +33,8 @@ class ServiceController extends ApiMutableServiceControllerBase
 
             // serialize model to config and save
             if ($valMsgs->count() == 0) {
-                $mdlGerdenPing->serializeToConfig();
-                Config::getInstance()->save();
-                $result["result"] = "saved";
+
+                $result["result"] = "ok";
             }
         }
         return $result;
