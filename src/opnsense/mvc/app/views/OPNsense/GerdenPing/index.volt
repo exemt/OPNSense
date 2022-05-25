@@ -20,6 +20,7 @@
                     case 'fail':
                         resultContainer.html('unknown ERROR')
                 }
+                return
         }
 
         const cb_fail = () => {
@@ -30,7 +31,7 @@
         $("#goPing").click(function(){
             container.css({"display":"block"})
             resultContainer.html('loading')
-            saveFormToEndpoint(url="/api/gerdenping/service/ping",formid='frm_mainform',cb_ok,true,cb_fail});
+            saveFormToEndpoint(url="/api/gerdenping/service/ping",formid='frm_mainform',cb_ok,true,cb_fail);
         });
     });
 </script>
