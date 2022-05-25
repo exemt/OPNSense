@@ -7,6 +7,6 @@ class IndexController extends BaseController
     public function indexAction()
     {
          $this->view->pick('OPNsense/GerdenPing/index');
-         //$this->view->generalForm = $this->getForm("MainForm");
+         $this->view->generalForm = $this->getForm("MainForm");
     }
 }
