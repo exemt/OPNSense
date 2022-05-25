@@ -4,7 +4,8 @@
         // link save button to API set action
         $("#goPing").click(function(){
             saveFormToEndpoint(url="/api/gerdenping/service/ping",formid='frm_mainform',callback_ok = function(response){
-                console.log(response)
+                $('#pingResult').html(response.data)
+
             },true);
 
         });
@@ -15,4 +16,9 @@
 
 <div class="col-md-12">
     <button class="btn btn-primary"  id="goPing" type="button"><b>{{ lang._('Save') }}</b></button>
+</div>
+<div class="col-md-12">
+    <div class="alert alert-primary" role="alert" id="pingResult">
+
+    </div>
 </div>
