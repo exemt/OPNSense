@@ -31,7 +31,7 @@ class ServiceController extends ApiMutableServiceControllerBase
                     $result["validations"] = array();
                 }
                 $result["validations"]["gerdenping.".$msg->getField()] = $msg->getMessage();
-                print_r($msg->getField());
+                print_r($msg->getMessage());
                 die();
             }
 
