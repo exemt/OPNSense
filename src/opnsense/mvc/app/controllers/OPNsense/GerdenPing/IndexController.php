@@ -1,10 +1,11 @@
 <?php
 namespace OPNsense\GerdenPing;
-class IndexController extends \OPNsense\Base\IndexController
+use OPNsense\Base\IndexController as BaseController;
+
+class IndexController extends BaseController
 {
     public function indexAction()
     {
-        // pick the template to serve to our users.
-        $this->view->pick('OPNsense/GerdenPing/index');
+         $this->view->pick('OPNsense/GerdenPing/index');
     }
 }
