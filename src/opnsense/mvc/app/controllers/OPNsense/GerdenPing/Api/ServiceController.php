@@ -6,7 +6,12 @@ use OPNsense\Base\ApiMutableServiceControllerBase;
 
 class ServiceController extends ApiMutableServiceControllerBase
 {
-    public function reloadAction()
+
+    protected static $internalServiceClass = '\OPNsense\GerdenPing\GerdenPing';
+
+    protected static $internalServiceName = 'ping';
+
+    public function pingAction()
     {
         $status = "OK";
 
