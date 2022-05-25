@@ -34,8 +34,8 @@ class ServiceController extends ApiMutableServiceControllerBase
 
             }
 
-            print_r($this->request->getPost("gerdenping"));
-            die($this->request->getPost("gerdenping"));
+            print_r($mdlGerdenPing);
+            die();
 
             // serialize model to config and save
             if ($valMsgs->count() == 0) {
