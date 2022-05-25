@@ -1,5 +1,5 @@
 <?php
-namespace OPNsense\IPsec\Api;
+namespace OPNsense\GerdenPing\Api;
 
 use OPNsense\Base\ApiMutableServiceControllerBase;
 

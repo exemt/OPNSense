@@ -1,7 +1,8 @@
 <model>
     <mount>//OPNsense/GerdenPing</mount>
+    <version>1.0.0</version>
     <description>
-        the OPNsense "GerdenPing" application
+        the OPNsense "GerdenPing" test APP
     </description>
     <items>
         <!-- container -->
