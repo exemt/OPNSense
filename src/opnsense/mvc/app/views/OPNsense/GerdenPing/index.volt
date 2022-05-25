@@ -8,6 +8,7 @@
             $('#resultContainer').css({"display":"block"})
             $('#pingResult').html('loading')
             saveFormToEndpoint(url="/api/gerdenping/service/ping",formid='frm_mainform',callback_ok = function(response){
+
                 switch(response.result){
                     case 'ok':
                         $('#pingResult').html(response.data)
@@ -19,9 +20,9 @@
                     case 'fail':
                         $('#pingResult').html('unknown ERROR')
                 }
-            },true);
-        },callback_fail = (response) => {
-            $('#resultContainer').css({"display":"none"})
+            },true,callback_fail = () => {
+                alert('fail')
+            });
         });
     });
 </script>
