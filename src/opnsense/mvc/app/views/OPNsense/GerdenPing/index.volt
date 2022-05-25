@@ -5,6 +5,7 @@
     $( document ).ready(function() {
         // link save button to API set action
         $("#goPing").click(function(){
+            $('#resultContainer').css( "display":"block")
             $('#pingResult').html('loading')
             saveFormToEndpoint(url="/api/gerdenping/service/ping",formid='frm_mainform',callback_ok = function(response){
                 switch(response.result){
@@ -26,7 +27,7 @@
 <div class="col-md-12">
     <button class="btn btn-primary"  id="goPing" type="button">PING!</button>
 </div>
-<div class="col-md-12" id="resultContainer">
+<div class="col-md-12" id="resultContainer" style="display:none">
     <div class="alert alert-primary" role="alert" >
         <pre id="pingResult"></pre>
     </div>
