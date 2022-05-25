@@ -5,11 +5,11 @@
     </description>
     <items>
         <!-- container -->
-        <general>
+        <mainform>
             <!-- fields -->
             <IP type="NetworkField">
                 <Required>Y</Required>
             </IP>
-        </general>
+        </mainform>
     </items>
 </model>
