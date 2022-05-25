@@ -35,7 +35,7 @@ class ServiceController extends ApiMutableServiceControllerBase
             // serialize model to config and save
             if ($valMsgs->count() == 0) {
                 $backend = new Backend();
-                $result["data"] = trim($backend->configdRun('gerdenping ping'));
+                $result["data"] = trim($backend->configdRun('gerdenping ping 8.8.8.8'));
                 $result["result"] = "ok";
             }
         }
