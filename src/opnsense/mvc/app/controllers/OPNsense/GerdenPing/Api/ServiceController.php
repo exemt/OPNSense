@@ -34,7 +34,7 @@ class ServiceController extends ApiMutableServiceControllerBase
                 $validResults["gerdenping.".$msg->getField()] = $msg->getMessage();
             }
             if($valMsgs->count() > 0)
-                throw new Exception('validation fault');
+                throw new \Exception('validation fault');
 
             if(!filter_var(print_r($requestData['mainform']['IP'], FILTER_VALIDATE_IP)));
                 throw new \Exception('invalid IP');
