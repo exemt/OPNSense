@@ -2,27 +2,35 @@
 {{ partial("layout_partials/base_form",['fields':mainform,'id':'frm_mainform'])}}
 </div>
 <script type="text/javascript">
-    $( document ).ready(function() {
-        // link save button to API set action
-        $("#goPing").click(function(){
-            $('#resultContainer').css({"display":"block"})
-            $('#pingResult').html('loading')
-            saveFormToEndpoint(url="/api/gerdenping/service/ping",formid='frm_mainform',callback_ok = function(response){
 
+
+
+    $( document ).ready(function() {
+        const container = $('#resultContainer');
+        const resultContainer = $('#pingResult');
+        const cb_ok = (response) => {
                 switch(response.result){
                     case 'ok':
-                        $('#pingResult').html(response.data)
+                        resultContainer.html(response.data)
                     break;
                     case 'fail':
-                        $('#pingResult').html(response.message)
+                        resultContainer.html(response.message)
                     break;
                     default:
                     case 'fail':
-                        $('#pingResult').html('unknown ERROR')
+                        resultContainer.html('unknown ERROR')
                 }
-            },true,callback_fail = () => {
-                alert('fail')
-            });
+        }
+
+        const cb_fail = () => {
+            container.css({"display":"none"})
+        }
+
+
+        $("#goPing").click(function(){
+            container.css({"display":"block"})
+            resultContainer.html('loading')
+            saveFormToEndpoint(url="/api/gerdenping/service/ping",formid='frm_mainform',cb_ok,true,cb_fail});
         });
     });
 </script>
