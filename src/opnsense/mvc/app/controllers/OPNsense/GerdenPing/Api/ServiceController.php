@@ -1,6 +1,7 @@
 <?php
 namespace OPNsense\GerdenPing\Api;
 
+use JakubOnderka\PhpParallelLint\Exception;
 use OPNsense\Base\ApiMutableServiceControllerBase;
 use OPNsense\Core\Backend;
 use OPNsense\GerdenPing\GerdenPing;
@@ -17,9 +18,10 @@ class ServiceController extends ApiMutableServiceControllerBase
 
     public function pingAction()
     {
-        $result = array("result"=>"error");
-        if ($this->request->isPost()) {
-            // load model and update with provided data
+        try {
+            if (!$this->request->isPost())
+                throw new \Exception('wrong request');
+
             $mdlGerdenPing = new GerdenPing();
             $requestData = $this->request->getPost("gerdenping");
             $mdlGerdenPing->setNodes($requestData);
@@ -27,24 +29,27 @@ class ServiceController extends ApiMutableServiceControllerBase
             // perform validation
             $valMsgs = $mdlGerdenPing->performValidation();
 
+            $validResults = [];
             foreach ($valMsgs as $field => $msg) {
-                if (!array_key_exists("validations", $result)) {
-                    $result["validations"] = array();
-                }
-                $result["validations"]["gerdenping.".$msg->getField()] = $msg->getMessage();
+                $validResults["gerdenping.".$msg->getField()] = $msg->getMessage();
             }
+            if($valMsgs->count() > 0)
+                throw new Exception('validation fault');
 
-            print_r($requestData);
-            die();
+            if(!filter_var(print_r($requestData['mainform']['IP'], FILTER_VALIDATE_IP)));
+                throw new \Exception('invalid IP');
 
-            // serialize model to config and save
-            if ($valMsgs->count() == 0) {
-                $backend = new Backend();
-                $result["data"] = trim($backend->configdRun('gerdenping ping 8.8.8.8'));
-                $result["result"] = "ok";
-            }
+            $backend = new Backend();
+            $result["data"] = trim($backend->configdRun('gerdenping ping '.$requestData['mainform']['IP']));
+            $result["result"] = "ok";
+
+        }catch (\Exception $e){
+            return [
+                'result' => 'fail',
+                'message' => $e->getMessage(),
+                'validation' => $validResults
+            ];
         }
         return $result;
-
     }
 }
