@@ -36,7 +36,7 @@ class ServiceController extends ApiMutableServiceControllerBase
             if(count($validations) > 0)
                 throw new \Exception('validation fault');
 
-            if(!filter_var(print_r($requestData['mainform']['IP'], FILTER_VALIDATE_IP)));
+            if(!filter_var($requestData['mainform']['IP'], FILTER_VALIDATE_IP));
                 throw new \Exception('invalid IP');
 
             $backend = new Backend();
