@@ -29,11 +29,11 @@ class ServiceController extends ApiMutableServiceControllerBase
             // perform validation
             $valMsgs = $mdlGerdenPing->performValidation();
 
-            $validResults = [];
+            $validations = [];
             foreach ($valMsgs as $field => $msg) {
-                $validResults["gerdenping.".$msg->getField()] = $msg->getMessage();
+                $validations["gerdenping.".$msg->getField()] = $msg->getMessage();
             }
-            if($valMsgs->count() > 0)
+            if(count($validations) > 0)
                 throw new \Exception('validation fault');
 
             if(!filter_var(print_r($requestData['mainform']['IP'], FILTER_VALIDATE_IP)));
@@ -47,7 +47,7 @@ class ServiceController extends ApiMutableServiceControllerBase
             return [
                 'result' => 'fail',
                 'message' => $e->getMessage(),
-                'validation' => $validResults
+                'validations' => $validations
             ];
         }
         return $result;
