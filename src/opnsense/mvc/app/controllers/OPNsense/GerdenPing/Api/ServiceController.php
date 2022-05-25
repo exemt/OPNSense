@@ -2,6 +2,7 @@
 namespace OPNsense\GerdenPing\Api;
 
 use OPNsense\Base\ApiMutableServiceControllerBase;
+use OPNsense\Core\Backend;
 use OPNsense\GerdenPing\GerdenPing;
 
 
@@ -33,7 +34,8 @@ class ServiceController extends ApiMutableServiceControllerBase
 
             // serialize model to config and save
             if ($valMsgs->count() == 0) {
-
+                $backend = new Backend();
+                $result["data"] = trim($backend->configdRun('gerdenping ping'));
                 $result["result"] = "ok";
             }
         }
