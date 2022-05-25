@@ -1,7 +1,7 @@
 <menu>
     <Services>
         <GerdenPing order="11" VisibleName="GerdenPing" cssClass="fa fa-bolt fa-fw">
-            <Cache order="1" VisibleName="Ping" url="/ui/gerdenPing"/>
+            <Cache order="1" VisibleName="Ping" url="/ui/gerdenping"/>
         </GerdenPing>
     </Services>
 </menu>

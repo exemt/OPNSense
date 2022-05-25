@@ -2,7 +2,7 @@
     <mount>//OPNsense/GerdenPing</mount>
     <version>1.0.0</version>
     <description>
-        the OPNsense "GerdenPing" test APP
+        GerdenPing APP
     </description>
     <items>
         <!-- container -->
