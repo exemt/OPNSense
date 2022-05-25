@@ -23,8 +23,11 @@
                 return
         }
 
-        const cb_fail = () => {
-            container.css({"display":"none"})
+        const cb_fail = (response) => {
+            if(response.hasOwnProperty('message'))
+                resultContainer.html(response.message)
+            else
+                container.css({"display":"none"})
         }
 
 
