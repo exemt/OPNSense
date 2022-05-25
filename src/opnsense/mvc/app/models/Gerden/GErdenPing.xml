@@ -1,0 +1,8 @@
+<model>
+    <mount>//OPNsense/GerdenPing</mount>
+    <description>
+        the OPNsense "GerdenPing" application
+    </description>
+    <items>
+    </items>
+</model>
