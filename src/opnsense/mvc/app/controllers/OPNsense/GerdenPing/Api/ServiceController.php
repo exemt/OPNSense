@@ -21,7 +21,8 @@ class ServiceController extends ApiMutableServiceControllerBase
         if ($this->request->isPost()) {
             // load model and update with provided data
             $mdlGerdenPing = new GerdenPing();
-            $mdlGerdenPing->setNodes($this->request->getPost("gerdenping"));
+            $requestData = $this->request->getPost("gerdenping");
+            $mdlGerdenPing->setNodes($requestData);
 
             // perform validation
             $valMsgs = $mdlGerdenPing->performValidation();
@@ -33,7 +34,7 @@ class ServiceController extends ApiMutableServiceControllerBase
                 $result["validations"]["gerdenping.".$msg->getField()] = $msg->getMessage();
             }
 
-            print_r($valMsgs);
+            print_r($requestData);
             die();
 
             // serialize model to config and save
