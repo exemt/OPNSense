@@ -7,6 +7,8 @@ class IndexController extends BaseController
     public function indexAction()
     {
          $this->view->pick('OPNsense/GerdenPing/index');
-         $this->view->mainform = $this->getForm("mainform");
+
     }
 }
+
+//{{ partial("layout_partials/base_form",['fields':mainform,'id':'frm_mainform'])}}
