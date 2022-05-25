@@ -9,7 +9,6 @@ use OPNsense\GerdenPing\GerdenPing;
 
 class ServiceController extends ApiMutableServiceControllerBase
 {
-
     protected static $internalServiceClass = '\OPNsense\GerdenPing\GerdenPing';
     protected static $internalServiceEnabled = 'general.enabled';
     protected static $internalServiceTemplate = 'OPNsense/GerdenPing';
@@ -26,7 +25,6 @@ class ServiceController extends ApiMutableServiceControllerBase
             $requestData = $this->request->getPost("gerdenping");
             $mdlGerdenPing->setNodes($requestData);
 
-            // perform validation
             $valMsgs = $mdlGerdenPing->performValidation();
 
             $validations = [];

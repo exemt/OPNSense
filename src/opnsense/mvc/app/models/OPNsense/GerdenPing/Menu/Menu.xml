@@ -1,5 +1,4 @@
 <menu>
-    <GerdenPing order="999" VisibleName="GerdenPing" cssClass="fa fa-bolt fa-fw">
-        <Cache order="1" VisibleName="Ping" url="/ui/gerdenping"/>
+    <GerdenPing order="999" VisibleName="GerdenPing" cssClass="fa fa-bolt fa-fw" url="/ui/gerdenping">
     </GerdenPing>
 </menu>

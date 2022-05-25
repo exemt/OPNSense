@@ -2,11 +2,7 @@
 {{ partial("layout_partials/base_form",['fields':mainform,'id':'frm_mainform'])}}
 </div>
 <script type="text/javascript">
-
-
-
     $( document ).ready(function() {
-
         const container = $('#resultContainer');
         const resultContainer = $('#pingResult');
         const cb_ok = (response) => {
