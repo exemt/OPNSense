@@ -1,4 +1,6 @@
+<div class="col-md-12">
 {{ partial("layout_partials/base_form",['fields':mainform,'id':'frm_mainform'])}}
+</div>
 <script type="text/javascript">
     $( document ).ready(function() {
         // link save button to API set action
@@ -15,11 +17,10 @@
 </script>
 
 <div class="col-md-12">
-    <button class="btn btn-primary"  id="goPing" type="button"><b>{{ lang._('Save') }}</b></button>
+    <button class="btn btn-primary"  id="goPing" type="button">PING!</button>
 </div>
 <div class="col-md-12" id="resultContainer">
     <div class="alert alert-primary" role="alert" >
-        <pre id="pingResult">
-        </pre>
+        <pre id="pingResult"></pre>
     </div>
 </div>
